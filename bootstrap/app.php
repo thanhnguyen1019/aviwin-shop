@@ -97,9 +97,9 @@ return Application::configure(basePath: dirname(__DIR__))
         ) {
             if ($request->is('api/*')) {
                 return ApiResponse::error(
-                    'Bạn chưa đăng nhập',
-                    401
-                );
+    $exception->getMessage() ?: 'Bạn chưa đăng nhập',
+    401
+);
             }
         });
 

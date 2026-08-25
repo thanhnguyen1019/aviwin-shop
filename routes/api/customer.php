@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\Customer\Auth\AuthController;
 use App\Http\Controllers\Api\Customer\BrandController;
 use App\Http\Controllers\Api\Customer\CategoryController;
 use App\Http\Controllers\Api\Customer\ColorController;
@@ -48,3 +49,26 @@ Route::get(
     '/products/{slug}',
     [ProductController::class, 'show']
 );
+
+Route::post(
+    '/register',
+    [AuthController::class, 'register']
+);
+
+Route::post(
+    '/login',
+    [AuthController::class, 'login']
+);
+Route::middleware('auth:sanctum')
+    ->group(function () {
+
+        Route::get(
+            '/profile',
+            [AuthController::class, 'profile']
+        );
+
+        Route::post(
+            '/logout',
+            [AuthController::class, 'logout']
+        );
+    });

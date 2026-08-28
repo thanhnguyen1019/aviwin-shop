@@ -71,4 +71,13 @@ Route::middleware('auth:sanctum')
             '/logout',
             [AuthController::class, 'logout']
         );
+
+        Route::put(
+    '/profile',
+    [AuthController::class, 'updateProfile']
+);
+Route::put(
+    '/profile/password',
+    [AuthController::class, 'changePassword']
+);
     });

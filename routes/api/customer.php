@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\Customer\AddressController;
 use App\Http\Controllers\Api\Customer\Auth\AuthController;
 use App\Http\Controllers\Api\Customer\BrandController;
 use App\Http\Controllers\Api\Customer\CategoryController;
@@ -80,4 +81,30 @@ Route::put(
     '/profile/password',
     [AuthController::class, 'changePassword']
 );
+
+Route::get(
+    '/addresses',
+    [AddressController::class, 'index']
+);
+
+Route::post(
+    '/addresses',
+    [AddressController::class, 'store']
+);
+
+Route::put(
+    '/addresses/{address}',
+    [AddressController::class, 'update']
+);
+
+Route::patch(
+    '/addresses/{address}',
+    [AddressController::class, 'update']
+);
+
+Route::delete(
+    '/addresses/{address}',
+    [AddressController::class, 'destroy']
+);
+
     });

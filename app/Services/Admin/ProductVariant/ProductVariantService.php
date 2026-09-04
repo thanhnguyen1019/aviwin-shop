@@ -47,51 +47,81 @@ class ProductVariantService
     }
 
     public function update(
-        Product $product,
-        ProductVariant $variant,
-        array $data
-    ): ProductVariant {
-        $this->ensureBelongsToProduct(
-            $product,
-            $variant
-        );
+    Product $product,
+    ProductVariant $variant,
+    array $data
+): ProductVariant {
+    $this->ensureBelongsToProduct(
+        $product,
+        $variant
+    );
 
-        $colorId = array_key_exists('color_id', $data)
-            ? $data['color_id']
-            : $variant->color_id;
+    /*
+    |--------------------------------------------------------------------------
+    | Stock không được update từ Variant CRUD
+    |--------------------------------------------------------------------------
+    |
+    | Mọi thay đổi tồn kho sau khi Variant đã được tạo
+    | phải đi qua Inventory / StockService để có stock history.
+    |
+    */
 
-        $sizeId = array_key_exists('size_id', $data)
-            ? $data['size_id']
-            : $variant->size_id;
+    unset(
+        $data['stock']
+    );
 
-        $price = array_key_exists('price', $data)
-            ? $data['price']
-            : $variant->price;
+    $colorId = array_key_exists(
+        'color_id',
+        $data
+    )
+        ? $data['color_id']
+        : $variant->color_id;
 
-        $salePrice = array_key_exists('sale_price', $data)
-            ? $data['sale_price']
-            : $variant->sale_price;
+    $sizeId = array_key_exists(
+        'size_id',
+        $data
+    )
+        ? $data['size_id']
+        : $variant->size_id;
 
-        $this->validatePrices(
-            $product,
-            $price,
-            $salePrice
-        );
+    $price = array_key_exists(
+        'price',
+        $data
+    )
+        ? $data['price']
+        : $variant->price;
 
-        $this->ensureCombinationUnique(
-            $product,
-            $colorId,
-            $sizeId,
-            $variant->id
-        );
+    $salePrice = array_key_exists(
+        'sale_price',
+        $data
+    )
+        ? $data['sale_price']
+        : $variant->sale_price;
 
-        $variant->update($data);
+    $this->validatePrices(
+        $product,
+        $price,
+        $salePrice
+    );
 
-        return $variant->refresh()->load([
+    $this->ensureCombinationUnique(
+        $product,
+        $colorId,
+        $sizeId,
+        $variant->id
+    );
+
+    $variant->update(
+        $data
+    );
+
+    return $variant
+        ->refresh()
+        ->load([
             'color',
             'size',
         ]);
-    }
+}
 
     public function delete(
         Product $product,

@@ -5,7 +5,10 @@ namespace App\Services\Customer\Order;
 use App\Models\Order;
 use App\Models\OrderStatusHistory;
 use App\Models\ProductVariant;
+use App\Models\StockHistory;
 use App\Models\User;
+use App\Repositories\Contracts\Order\OrderRepositoryInterface;
+use App\Services\Inventory\StockService;
 use App\Services\Order\OrderStatusHistoryService;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
@@ -14,7 +17,9 @@ use Illuminate\Validation\ValidationException;
 class OrderService
 {
     public function __construct(
-        protected OrderStatusHistoryService $historyService
+        protected OrderRepositoryInterface $orderRepository,
+        protected OrderStatusHistoryService $historyService,
+        protected StockService $stockService
     ) {
     }
 
@@ -65,14 +70,28 @@ class OrderService
         return $order->load('items');
     }
 
-    public function cancel(User $user,Order $order,?string $reason = null): Order {abort_unless($order->user_id === $user->id,404);
+    public function cancel(
+        User $user,
+        Order $order,
+        ?string $reason = null
+    ): Order {
+        abort_unless(
+            $order->user_id === $user->id,
+            404
+        );
 
-        return DB::transaction(function () use ($user,$order,$reason) {
+        return DB::transaction(function () use (
+            $user,
+            $order,
+            $reason
+        ) {
             $lockedOrder = Order::query()
                 ->whereKey($order->id)
                 ->lockForUpdate()
                 ->firstOrFail();
+
             $fromStatus = $lockedOrder->status;
+
             $this->ensureOrderCanBeCancelled(
                 $lockedOrder
             );
@@ -97,19 +116,22 @@ class OrderService
                     continue;
                 }
 
-                $variant->increment(
-                    'stock',
-                    $item->quantity
+                $this->stockService->change(
+                    $variant,
+                    (int) $item->quantity,
+                    'Hoàn tồn kho do khách hàng hủy đơn '
+                        . $lockedOrder->code,
+                    $user->id,
+                    StockHistory::TYPE_CANCEL_RESTORE
                 );
             }
-            
+
             $lockedOrder->update([
                 'status' => Order::STATUS_CANCELLED,
-
                 'cancel_reason' => $reason,
-
                 'cancelled_at' => now(),
             ]);
+
             $this->historyService->create(
                 $lockedOrder,
                 $fromStatus,

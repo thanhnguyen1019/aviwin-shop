@@ -44,4 +44,11 @@ class ProductVariant extends Model
     {
         return $this->belongsTo(Size::class);
     }
+    public function stockHistories()
+{
+    return $this->hasMany(
+        StockHistory::class,
+        'product_variant_id'
+    )->latest('id');
+}
 }

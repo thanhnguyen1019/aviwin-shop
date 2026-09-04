@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\Admin\CategoryController;
 use App\Http\Controllers\Api\Admin\ColorController;
 use App\Http\Controllers\Api\Admin\CustomerController;
 use App\Http\Controllers\Api\Admin\DashboardController;
+use App\Http\Controllers\Api\Admin\InventoryController;
 use App\Http\Controllers\Api\Admin\OrderController;
 use App\Http\Controllers\Api\Admin\ProductController;
 use App\Http\Controllers\Api\Admin\ProductImageController;
@@ -147,5 +148,19 @@ Route::middleware([
     Route::get(
     '/dashboard',
     [DashboardController::class, 'index']
+);
+Route::get(
+    '/inventory',
+    [InventoryController::class, 'index']
+);
+
+Route::get(
+    '/inventory/{variant}/histories',
+    [InventoryController::class, 'histories']
+);
+
+Route::post(
+    '/inventory/{variant}/adjust',
+    [InventoryController::class, 'adjust']
 );
 });

@@ -4,10 +4,12 @@ namespace App\Providers;
 
 use App\Repositories\Contracts\Customer\CustomerRepositoryInterface;
 use App\Repositories\Contracts\Dashboard\DashboardRepositoryInterface;
+use App\Repositories\Contracts\Inventory\InventoryRepositoryInterface;
 use App\Repositories\Contracts\Order\OrderRepositoryInterface;
 use App\Repositories\Contracts\Product\ProductRepositoryInterface;
 use App\Repositories\Eloquent\Customer\CustomerRepository;
 use App\Repositories\Eloquent\Dashboard\DashboardRepository;
+use App\Repositories\Eloquent\Inventory\InventoryRepository;
 use App\Repositories\Eloquent\Order\OrderRepository;
 use App\Repositories\Eloquent\Product\ProductRepository;
 use Illuminate\Support\ServiceProvider;
@@ -36,6 +38,10 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             DashboardRepositoryInterface::class,
             DashboardRepository::class
+        );
+        $this->app->bind(
+            InventoryRepositoryInterface::class,
+            InventoryRepository::class
         );
     }
 

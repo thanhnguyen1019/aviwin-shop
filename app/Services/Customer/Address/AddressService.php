@@ -54,11 +54,7 @@ class AddressService
             $address
         );
 
-        return DB::transaction(function () use (
-            $user,
-            $address,
-            $data
-        ) {
+        return DB::transaction(function () use ($user, $address, $data) {
             if (
                 array_key_exists('is_default', $data)
                 && (bool) $data['is_default']
@@ -70,18 +66,18 @@ class AddressService
                     ]);
             }
             if (
-    array_key_exists('is_default', $data)
-    && $data['is_default'] === false
-    && $address->is_default
-) {
-    $hasOtherAddress = $user->addresses()
-        ->where('id', '!=', $address->id)
-        ->exists();
+                array_key_exists('is_default', $data)
+                && $data['is_default'] === false
+                && $address->is_default
+            ) {
+                $hasOtherAddress = $user->addresses()
+                    ->where('id', '!=', $address->id)
+                    ->exists();
 
-    if ($hasOtherAddress) {
-        unset($data['is_default']);
-    }
-}
+                if ($hasOtherAddress) {
+                    unset($data['is_default']);
+                }
+            }
             $address->update($data);
 
             return $address->refresh();

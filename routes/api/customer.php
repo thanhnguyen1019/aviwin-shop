@@ -3,8 +3,11 @@
 use App\Http\Controllers\Api\Customer\AddressController;
 use App\Http\Controllers\Api\Customer\Auth\AuthController;
 use App\Http\Controllers\Api\Customer\BrandController;
+use App\Http\Controllers\Api\Customer\CartController;
 use App\Http\Controllers\Api\Customer\CategoryController;
+use App\Http\Controllers\Api\Customer\CheckoutController;
 use App\Http\Controllers\Api\Customer\ColorController;
+use App\Http\Controllers\Api\Customer\OrderController;
 use App\Http\Controllers\Api\Customer\ProductController;
 use App\Http\Controllers\Api\Customer\SizeController;
 use App\Support\ApiResponse;
@@ -74,37 +77,80 @@ Route::middleware('auth:sanctum')
         );
 
         Route::put(
-    '/profile',
-    [AuthController::class, 'updateProfile']
-);
-Route::put(
-    '/profile/password',
-    [AuthController::class, 'changePassword']
-);
+            '/profile',
+            [AuthController::class, 'updateProfile']
+        );
+        Route::put(
+            '/profile/password',
+            [AuthController::class, 'changePassword']
+        );
 
-Route::get(
-    '/addresses',
-    [AddressController::class, 'index']
+        Route::get(
+            '/addresses',
+            [AddressController::class, 'index']
+        );
+
+        Route::post(
+            '/addresses',
+            [AddressController::class, 'store']
+        );
+
+        Route::put(
+            '/addresses/{address}',
+            [AddressController::class, 'update']
+        );
+
+        Route::patch(
+            '/addresses/{address}',
+            [AddressController::class, 'update']
+        );
+
+        Route::delete(
+            '/addresses/{address}',
+            [AddressController::class, 'destroy']
+        );
+        Route::get(
+    '/cart',
+    [CartController::class, 'show']
 );
 
 Route::post(
-    '/addresses',
-    [AddressController::class, 'store']
-);
-
-Route::put(
-    '/addresses/{address}',
-    [AddressController::class, 'update']
+    '/cart/items',
+    [CartController::class, 'addItem']
 );
 
 Route::patch(
-    '/addresses/{address}',
-    [AddressController::class, 'update']
+    '/cart/items/{item}',
+    [CartController::class, 'updateItem']
 );
 
 Route::delete(
-    '/addresses/{address}',
-    [AddressController::class, 'destroy']
+    '/cart/items/{item}',
+    [CartController::class, 'deleteItem']
+);
+
+Route::delete(
+    '/cart',
+    [CartController::class, 'clear']
+);
+
+Route::post(
+    '/checkout',
+    [CheckoutController::class, 'store']
+);
+
+Route::get(
+    '/orders',
+    [OrderController::class, 'index']
+);
+
+Route::get(
+    '/orders/{order}',
+    [OrderController::class, 'show']
+);
+Route::patch(
+    '/orders/{order}/cancel',
+    [OrderController::class, 'cancel']
 );
 
     });

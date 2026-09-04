@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\Admin\BrandController;
 use App\Http\Controllers\Api\Admin\CategoryController;
 use App\Http\Controllers\Api\Admin\ColorController;
+use App\Http\Controllers\Api\Admin\OrderController;
 use App\Http\Controllers\Api\Admin\ProductController;
 use App\Http\Controllers\Api\Admin\ProductImageController;
 use App\Http\Controllers\Api\Admin\ProductVariantController;
@@ -87,4 +88,28 @@ Route::patch(
 Route::delete(
     '/products/{product}/variants/{variant}',
     [ProductVariantController::class, 'destroy']
+);
+
+Route::get(
+    '/orders',
+    [OrderController::class, 'index']
+);
+
+Route::get(
+    '/orders/{order}',
+    [OrderController::class, 'show']
+);
+
+Route::patch(
+    '/orders/{order}/status',
+    [OrderController::class, 'updateStatus']
+);
+
+Route::patch(
+    '/orders/{order}/payment-status',
+    [OrderController::class, 'updatePaymentStatus']
+);
+Route::get(
+    '/orders/{order}/histories',
+    [OrderController::class, 'histories']
 );

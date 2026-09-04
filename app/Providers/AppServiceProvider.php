@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Repositories\Contracts\Order\OrderRepositoryInterface;
 use App\Repositories\Contracts\Product\ProductRepositoryInterface;
+use App\Repositories\Eloquent\Order\OrderRepository;
 use App\Repositories\Eloquent\Product\ProductRepository;
 use Illuminate\Support\ServiceProvider;
 use App\Repositories\Contracts\Customer\Product\ProductRepositoryInterface as CustomerProductRepositoryInterface;
@@ -19,6 +21,10 @@ class AppServiceProvider extends ServiceProvider
         CustomerProductRepositoryInterface::class,
         CustomerProductRepository::class
     );
+    $this->app->bind(
+    OrderRepositoryInterface::class,
+    OrderRepository::class
+);
     }
 
     public function boot(): void

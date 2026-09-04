@@ -26,6 +26,7 @@ Route::post(
 );
 Route::middleware([
     'auth:sanctum',
+    'active',
     'admin',
 ])->group(function () {
     Route::apiResource(
@@ -125,12 +126,21 @@ Route::middleware([
     );
 
     Route::get(
-    '/customers',
-    [CustomerController::class, 'index']
-);
+        '/customers',
+        [CustomerController::class, 'index']
+    );
 
-Route::get(
-    '/customers/{customer}',
-    [CustomerController::class, 'show']
-);
+    Route::get(
+        '/customers/{customer}',
+        [CustomerController::class, 'show']
+    );
+    Route::patch(
+        '/customers/{customer}/block',
+        [CustomerController::class, 'block']
+    );
+
+    Route::patch(
+        '/customers/{customer}/unblock',
+        [CustomerController::class, 'unblock']
+    );
 });

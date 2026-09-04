@@ -18,11 +18,16 @@ public const ROLE_ADMIN = 'admin';
         'email',
         'password',
         'role',
+        'is_active',
+    'blocked_at',
+    'blocked_reason',
     ];
 
     protected $hidden = [
-        'password',
-        'remember_token',
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+        'is_active' => 'boolean',
+        'blocked_at' => 'datetime',
     ];
 
     protected function casts(): array
@@ -52,5 +57,14 @@ public function isAdmin(): bool
 public function isCustomer(): bool
 {
     return $this->role === self::ROLE_CUSTOMER;
+}
+public function isActive(): bool
+{
+    return (bool) $this->is_active;
+}
+
+public function isBlocked(): bool
+{
+    return !$this->is_active;
 }
 }

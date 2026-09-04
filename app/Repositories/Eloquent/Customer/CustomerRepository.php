@@ -103,6 +103,24 @@ class CustomerRepository implements CustomerRepositoryInterface
             }
         }
 
+        if (
+    isset($filters['is_active'])
+    && $filters['is_active'] !== ''
+) {
+    $isActive = filter_var(
+        $filters['is_active'],
+        FILTER_VALIDATE_BOOLEAN,
+        FILTER_NULL_ON_FAILURE
+    );
+
+    if ($isActive !== null) {
+        $query->where(
+            'is_active',
+            $isActive
+        );
+    }
+}
+
         /*
         |--------------------------------------------------------------------------
         | Sort

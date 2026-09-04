@@ -35,6 +35,11 @@ class AuthService
                 'Tài khoản này không có quyền quản trị.'
             );
         }
+        if (!$user->isActive()) {
+            throw new AuthenticationException(
+                'Tài khoản quản trị hiện đang bị khóa.'
+            );
+        }
 
         $deviceName =
             $data['device_name']

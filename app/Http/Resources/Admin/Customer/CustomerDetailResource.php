@@ -58,6 +58,14 @@ class CustomerDetailResource extends JsonResource
 
             'updated_at' => $this->updated_at
                 ?->toDateTimeString(),
+                'account_status' => [
+    'is_active' => (bool) $this->is_active,
+
+    'blocked_at' => $this->blocked_at
+        ?->toDateTimeString(),
+
+    'blocked_reason' => $this->blocked_reason,
+],
         ];
     }
 }

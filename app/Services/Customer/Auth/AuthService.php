@@ -10,11 +10,12 @@ class AuthService
 {
     public function register(array $data): array
     {
-       $user = User::create([
+        $user = User::create([
             'name' => $data['name'],
             'email' => strtolower($data['email']),
             'password' => $data['password'],
             'role' => User::ROLE_CUSTOMER,
+            'is_active' => true,
         ]);
 
         $token = $user
@@ -45,6 +46,11 @@ class AuthService
         ) {
             throw new AuthenticationException(
                 'Email hoặc mật khẩu không chính xác.'
+            );
+        }
+        if (!$user->isActive()) {
+            throw new AuthenticationException(
+                'Tài khoản của bạn hiện đang bị khóa.'
             );
         }
 

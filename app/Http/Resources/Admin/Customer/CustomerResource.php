@@ -19,6 +19,11 @@ class CustomerResource extends JsonResource
 
             'role' => $this->role,
 
+            'is_active' => (bool) $this->is_active,
+
+            'blocked_at' => $this->blocked_at
+                    ?->toDateTimeString(),
+
             'orders_count' => (int) (
                 $this->orders_count ?? 0
             ),
@@ -28,10 +33,10 @@ class CustomerResource extends JsonResource
             ),
 
             'email_verified_at' => $this->email_verified_at
-                ?->toDateTimeString(),
+                    ?->toDateTimeString(),
 
             'created_at' => $this->created_at
-                ?->toDateTimeString(),
+                    ?->toDateTimeString(),
         ];
     }
 }

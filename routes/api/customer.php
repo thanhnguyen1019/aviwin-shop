@@ -63,7 +63,10 @@ Route::post(
     '/login',
     [AuthController::class, 'login']
 );
-Route::middleware('auth:sanctum')
+Route::middleware([
+    'auth:sanctum',
+    'active',
+])
     ->group(function () {
 
         Route::get(
@@ -110,47 +113,47 @@ Route::middleware('auth:sanctum')
             [AddressController::class, 'destroy']
         );
         Route::get(
-    '/cart',
-    [CartController::class, 'show']
-);
+            '/cart',
+            [CartController::class, 'show']
+        );
 
-Route::post(
-    '/cart/items',
-    [CartController::class, 'addItem']
-);
+        Route::post(
+            '/cart/items',
+            [CartController::class, 'addItem']
+        );
 
-Route::patch(
-    '/cart/items/{item}',
-    [CartController::class, 'updateItem']
-);
+        Route::patch(
+            '/cart/items/{item}',
+            [CartController::class, 'updateItem']
+        );
 
-Route::delete(
-    '/cart/items/{item}',
-    [CartController::class, 'deleteItem']
-);
+        Route::delete(
+            '/cart/items/{item}',
+            [CartController::class, 'deleteItem']
+        );
 
-Route::delete(
-    '/cart',
-    [CartController::class, 'clear']
-);
+        Route::delete(
+            '/cart',
+            [CartController::class, 'clear']
+        );
 
-Route::post(
-    '/checkout',
-    [CheckoutController::class, 'store']
-);
+        Route::post(
+            '/checkout',
+            [CheckoutController::class, 'store']
+        );
 
-Route::get(
-    '/orders',
-    [OrderController::class, 'index']
-);
+        Route::get(
+            '/orders',
+            [OrderController::class, 'index']
+        );
 
-Route::get(
-    '/orders/{order}',
-    [OrderController::class, 'show']
-);
-Route::patch(
-    '/orders/{order}/cancel',
-    [OrderController::class, 'cancel']
-);
+        Route::get(
+            '/orders/{order}',
+            [OrderController::class, 'show']
+        );
+        Route::patch(
+            '/orders/{order}/cancel',
+            [OrderController::class, 'cancel']
+        );
 
     });

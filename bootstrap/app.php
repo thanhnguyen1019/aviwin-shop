@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\EnsureUserIsActive;
 use App\Http\Middleware\EnsureUserIsAdmin;
 use App\Support\ApiResponse;
 use Illuminate\Auth\AuthenticationException;
@@ -47,6 +48,7 @@ return Application::configure(basePath: dirname(__DIR__))
         });
         $middleware->alias([
             'admin' => EnsureUserIsAdmin::class,
+            'active' => EnsureUserIsActive::class,
         ]);
     })
 

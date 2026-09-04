@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\EnsureUserIsAdmin;
 use App\Support\ApiResponse;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -44,6 +45,9 @@ return Application::configure(basePath: dirname(__DIR__))
 
             return '/login';
         });
+        $middleware->alias([
+            'admin' => EnsureUserIsAdmin::class,
+        ]);
     })
 
     /*

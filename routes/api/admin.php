@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\Admin\Auth\AuthController;
 use App\Http\Controllers\Api\Admin\BrandController;
 use App\Http\Controllers\Api\Admin\CategoryController;
 use App\Http\Controllers\Api\Admin\ColorController;
@@ -18,98 +19,107 @@ Route::get('/ping', function () {
     );
 });
 
-Route::apiResource(
-    'categories',
-    CategoryController::class
-);
-Route::apiResource(
-    'brands',
-    BrandController::class
-);
-Route::apiResource(
-    'colors',
-    ColorController::class
-);
-
-Route::apiResource(
-    'sizes',
-    SizeController::class
-);
-Route::apiResource(
-    'products',
-    ProductController::class
-);
-
-Route::get(
-    '/products/{product}/images',
-    [ProductImageController::class, 'index']
-);
-
 Route::post(
-    '/products/{product}/images',
-    [ProductImageController::class, 'store']
+    '/login',
+    [AuthController::class, 'login']
 );
+Route::middleware([
+    'auth:sanctum',
+    'admin',
+])->group(function () {
+    Route::apiResource(
+        'categories',
+        CategoryController::class
+    );
+    Route::apiResource(
+        'brands',
+        BrandController::class
+    );
+    Route::apiResource(
+        'colors',
+        ColorController::class
+    );
 
-Route::patch(
-    '/products/{product}/images/{image}/primary',
-    [ProductImageController::class, 'setPrimary']
-);
+    Route::apiResource(
+        'sizes',
+        SizeController::class
+    );
+    Route::apiResource(
+        'products',
+        ProductController::class
+    );
 
-Route::delete(
-    '/products/{product}/images/{image}',
-    [ProductImageController::class, 'destroy']
-);
+    Route::get(
+        '/products/{product}/images',
+        [ProductImageController::class, 'index']
+    );
 
-Route::get(
-    '/products/{product}/variants',
-    [ProductVariantController::class, 'index']
-);
+    Route::post(
+        '/products/{product}/images',
+        [ProductImageController::class, 'store']
+    );
 
-Route::post(
-    '/products/{product}/variants',
-    [ProductVariantController::class, 'store']
-);
+    Route::patch(
+        '/products/{product}/images/{image}/primary',
+        [ProductImageController::class, 'setPrimary']
+    );
 
-Route::get(
-    '/products/{product}/variants/{variant}',
-    [ProductVariantController::class, 'show']
-);
+    Route::delete(
+        '/products/{product}/images/{image}',
+        [ProductImageController::class, 'destroy']
+    );
 
-Route::put(
-    '/products/{product}/variants/{variant}',
-    [ProductVariantController::class, 'update']
-);
+    Route::get(
+        '/products/{product}/variants',
+        [ProductVariantController::class, 'index']
+    );
 
-Route::patch(
-    '/products/{product}/variants/{variant}',
-    [ProductVariantController::class, 'update']
-);
+    Route::post(
+        '/products/{product}/variants',
+        [ProductVariantController::class, 'store']
+    );
 
-Route::delete(
-    '/products/{product}/variants/{variant}',
-    [ProductVariantController::class, 'destroy']
-);
+    Route::get(
+        '/products/{product}/variants/{variant}',
+        [ProductVariantController::class, 'show']
+    );
 
-Route::get(
-    '/orders',
-    [OrderController::class, 'index']
-);
+    Route::put(
+        '/products/{product}/variants/{variant}',
+        [ProductVariantController::class, 'update']
+    );
 
-Route::get(
-    '/orders/{order}',
-    [OrderController::class, 'show']
-);
+    Route::patch(
+        '/products/{product}/variants/{variant}',
+        [ProductVariantController::class, 'update']
+    );
 
-Route::patch(
-    '/orders/{order}/status',
-    [OrderController::class, 'updateStatus']
-);
+    Route::delete(
+        '/products/{product}/variants/{variant}',
+        [ProductVariantController::class, 'destroy']
+    );
 
-Route::patch(
-    '/orders/{order}/payment-status',
-    [OrderController::class, 'updatePaymentStatus']
-);
-Route::get(
-    '/orders/{order}/histories',
-    [OrderController::class, 'histories']
-);
+    Route::get(
+        '/orders',
+        [OrderController::class, 'index']
+    );
+
+    Route::get(
+        '/orders/{order}',
+        [OrderController::class, 'show']
+    );
+
+    Route::patch(
+        '/orders/{order}/status',
+        [OrderController::class, 'updateStatus']
+    );
+
+    Route::patch(
+        '/orders/{order}/payment-status',
+        [OrderController::class, 'updatePaymentStatus']
+    );
+    Route::get(
+        '/orders/{order}/histories',
+        [OrderController::class, 'histories']
+    );
+});

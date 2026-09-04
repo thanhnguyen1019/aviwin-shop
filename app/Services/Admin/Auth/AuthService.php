@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Customer\Auth;
+namespace App\Services\Admin\Auth;
 
 use App\Models\User;
 use Illuminate\Auth\AuthenticationException;
@@ -8,27 +8,9 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthService
 {
-    public function register(array $data): array
-    {
-       $user = User::create([
-            'name' => $data['name'],
-            'email' => strtolower($data['email']),
-            'password' => $data['password'],
-            'role' => User::ROLE_CUSTOMER,
-        ]);
-
-        $token = $user
-            ->createToken('customer-register')
-            ->plainTextToken;
-
-        return [
-            'user' => $user,
-            'token' => $token,
-        ];
-    }
-
-    public function login(array $data): array
-    {
+    public function login(
+        array $data
+    ): array {
         $user = User::query()
             ->where(
                 'email',
@@ -48,21 +30,29 @@ class AuthService
             );
         }
 
-        $deviceName = $data['device_name']
-            ?? 'customer';
+        if (!$user->isAdmin()) {
+            throw new AuthenticationException(
+                'Tài khoản này không có quyền quản trị.'
+            );
+        }
+
+        $deviceName =
+            $data['device_name']
+            ?? 'admin';
 
         $token = $user
             ->createToken($deviceName)
             ->plainTextToken;
 
         return [
-            'user' => $user,
+            'admin' => $user,
             'token' => $token,
         ];
     }
 
-    public function logout(User $user): void
-    {
+    public function logout(
+        User $user
+    ): void {
         $token = $user->currentAccessToken();
 
         if ($token) {

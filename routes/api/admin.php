@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\Admin\BrandController;
 use App\Http\Controllers\Api\Admin\CategoryController;
 use App\Http\Controllers\Api\Admin\ColorController;
 use App\Http\Controllers\Api\Admin\CustomerController;
+use App\Http\Controllers\Api\Admin\DashboardController;
 use App\Http\Controllers\Api\Admin\OrderController;
 use App\Http\Controllers\Api\Admin\ProductController;
 use App\Http\Controllers\Api\Admin\ProductImageController;
@@ -143,4 +144,8 @@ Route::middleware([
         '/customers/{customer}/unblock',
         [CustomerController::class, 'unblock']
     );
+    Route::get(
+    '/dashboard',
+    [DashboardController::class, 'index']
+);
 });
